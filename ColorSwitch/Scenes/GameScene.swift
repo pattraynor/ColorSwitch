@@ -94,7 +94,15 @@ class GameScene: SKScene {
     }
     
     func gameOver() {
-        print("Game Over")
+        UserDefaults.standard.set(score, forKey: "RecentScore")
+        if score > UserDefaults.standard.integer(forKey: "Highscore") {
+            UserDefaults.standard.set(score, forKey: "Highscore")
+        }
+        
+        
+        
+        let menuScene = MenuScene(size: view!.bounds.size)
+        view!.presentScene(menuScene)
     }
     
     
@@ -113,6 +121,7 @@ extension GameScene: SKPhysicsContactDelegate {
             if let ball = contact.bodyA.node?.name == "Ball" ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as?
             SKSpriteNode {
                 if currentColorIndex == switchState.rawValue {
+                    //run(SKAction.playSoundFileNamed("blind", waitForCompletion: false))
                     score += 1
                     updateScoreLabel()
                     ball.run(SKAction.fadeOut(withDuration: 0.25), completion: {
